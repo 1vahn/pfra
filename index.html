@@ -214,6 +214,23 @@
 
     .pass .status-text { color: var(--pass-green); }
     .fail .status-text { color: var(--fail-red); }
+    
+    .disclaimer-footer {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid #E1E6EB;
+      text-align: center;
+    }
+    
+    .disclaimer-footer p {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      line-height: 1.35;
+    }
+    
   </style>
 </head>
 <body>
@@ -289,6 +306,11 @@
       <div class="status-text" id="statusText">ENTER DATA</div>
     </div>
   </div>
+  
+  <footer class="disclaimer-footer">
+    <p>This is not endorsed or otherwise affiliated with the US Air Force or Department of War. FOR UNOFFICIAL SCORING ONLY</p>
+  </footer>
+  
 </div>
 
 <script>
