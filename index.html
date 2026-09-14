@@ -248,15 +248,26 @@
 
   <div class="input-grid">
     <!-- Age Input -->
-    <div class="form-group">
+    <div class="form-group full-width">
       <label for="age">Age</label>
       <input type="number" id="age" value="18" min="17" max="69" oninput="calculateScore()">
     </div>
 
-    <!-- WHtR Decimal Input -->
+    <!-- Waist & Height Inputs for Ratio Calculation -->
     <div class="form-group">
+      <label for="waist">Waist (Inches)</label>
+      <input type="number" id="waist" step="0.1" placeholder="32.0" min="20" max="60" oninput="calculateWHtRFromInputs()">
+    </div>
+
+    <div class="form-group">
+      <label for="height">Height (Inches)</label>
+      <input type="number" id="height" step="0.1" placeholder="70.0" min="40" max="90" oninput="calculateWHtRFromInputs()">
+    </div>
+
+    <!-- WHtR Decimal Input (Auto-calculated or manually overridden) -->
+    <div class="form-group full-width">
       <label for="whtr">WHtR (Decimal)</label>
-      <input type="number" id="whtr" step="0.01" placeholder="0.48" min="0.30" max="0.70" oninput="calculateScore()">
+      <input type="number" id="whtr" step="0.001" placeholder="0.457" min="0.30" max="0.75" oninput="calculateScore()">
     </div>
 
     <!-- HRP Input -->
@@ -333,6 +344,58 @@
     if (age <= 59) return '55-59';
     return '60_and_over';
   }
+
+  // Auto-compute WHtR Decimal when Waist and Height are provided
+  function calculateWHtRFromInputs() {
+    const waist = parseFloat(document.getElementById('waist').value);
+    const height = parseFloat(document.getElementById('height').value);
+
+    if (!isNaN(waist) && !isNaN(height) && height > 0) {
+      const ratio = waist / height;
+      document.getElementById('whtr').value = ratio.toFixed(3);
+    }
+    calculateScore();
+  }
+
+  // JSON Data for WHtR (Waist-to-Height Ratio)
+  const rawWhtrData = {
+    "under_25": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    },
+    "25-29": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    },
+    "30-34": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    },
+    "35-39": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    },
+    "40-44": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    },
+    "45-49": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    },
+    "50-54": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    },
+    "55-59": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    },
+    "60_and_over": {
+      "male": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" },
+      "female": { "20.0": "<= 0.49", "19.0": "0.50", "18.0": "0.51", "17.0": "0.52", "16.0": "0.53", "15.0": "0.54", "12.5": "0.55", "10.0": "0.56", "7.5": "0.57", "5.0": "0.58", "2.5": "0.59", "0": ">= 0.60" }
+    }
+  };
 
   // Exact JSON Data Provided for 2-Mile Run Scoring
   const rawRunData = {
@@ -445,14 +508,31 @@
       },
       "55-59": {
         "male": { "15.0": ">= 44", "14.5": "43", "14.0": "42", "13.5": "41", "13.0": "40", "12.5": "39", "12.0": "38", "11.5": "37", "11.0": "36", "10.5": "35", "10.0": "34", "9.5": "33", "9.0": "32", "8.5": "31", "8.0": "30", "7.5": "29", "7.0": "28", "6.5": "27", "6.0": "26", "5.5": "25", "5.0": "24", "4.5": "23", "4.0": "22", "3.5": "21", "3.0": "20", "2.5": "19*" },
-        "female": { "15.0": ">= 32", "14.5": "31", "14.0": "30", "13.5": "29", "13.0": "28", "12.5": "27", "12.0": "26", "11.5": "25", "11.0": "24", "10.5": "23", "10.0": "22", "9.5": "21", "9.0": "20", "8.5": "19", "8.0": "18", "7.5": "17", "7.0": "16", "6.5": "15", "6.0": "14", "5.5": "13", "5.0": "12", "4.5": "11", "4.0": "10", "3.5": "9", "3.0": "8", "2.5": "7*" }
+        "female": { "15.0": ">= 28", "14.5": "27", "14.0": "26", "13.5": "25", "13.0": "24", "12.5": "23", "12.0": "22", "11.5": "21", "11.0": "20", "10.5": "19", "10.0": "18", "9.5": "17", "9.0": "16", "8.5": "15", "8.0": "14", "7.5": "13", "7.0": "12", "6.5": "11", "6.0": "10", "5.5": "9", "5.0": "8", "4.5": "7", "4.0": "6", "3.5": "5", "3.0": "4", "2.5": "3*" }
       },
       "60_and_over": {
-        "male": { "15.0": ">= 42", "14.5": "41", "14.0": "40", "13.5": "39", "13.0": "38", "12.5": "37", "12.0": "36", "11.5": "35", "11.0": "34", "10.5": "33", "10.0": "32", "9.5": "31", "9.0": "30", "8.5": "29", "8.0": "28", "7.5": "27", "7.0": "26", "6.5": "25", "6.0": "24", "5.5": "23", "5.0": "22", "4.5": "21", "4.0": "20", "3.5": "19", "3.0": "18", "2.5": "11*" },
+        "male": { "15.0": ">= 36", "14.5": "35", "14.0": "34", "13.5": "33", "13.0": "32", "12.5": "31", "12.0": "30", "11.5": "29", "11.0": "28", "10.5": "27", "10.0": "26", "9.5": "25", "9.0": "24", "8.5": "23", "8.0": "22", "7.5": "21", "7.0": "20", "6.5": "19", "6.0": "18", "5.5": "17", "5.0": "16", "4.5": "15", "4.0": "14", "3.5": "13", "3.0": "12", "2.5": "11*" },
         "female": { "15.0": ">= 31", "14.5": "30", "14.0": "29", "13.5": "28", "13.0": "27", "12.5": "26", "12.0": "25", "11.5": "24", "11.0": "23", "10.5": "22", "10.0": "21", "9.5": "20", "9.0": "19", "8.5": "18", "8.0": "17", "7.5": "16", "7.0": "15", "6.5": "14", "6.0": "13", "5.5": "12", "5.0": "11", "4.5": "10", "4.0": "9", "3.5": "8", "3.0": "7", "2.5": "6*" }
       }
     }
   };
+
+  // Pre-parser converting the WHtR JSON into parsed float-threshold arrays
+  const ProcessedWhtrStandards = {};
+  for (let ageKey in rawWhtrData) {
+    ProcessedWhtrStandards[ageKey] = {};
+    for (let genderKey in rawWhtrData[ageKey]) {
+      const list = [];
+      const pointsObj = rawWhtrData[ageKey][genderKey];
+      for (let ptsStr in pointsObj) {
+        let ratioVal = parseFloat(pointsObj[ptsStr].replace('<=', '').replace('>=', '').trim());
+        list.push({ points: parseFloat(ptsStr), thresholdRatio: ratioVal });
+      }
+      // Sort ascending by ratio cutoff threshold
+      list.sort((a, b) => a.thresholdRatio - b.thresholdRatio);
+      ProcessedWhtrStandards[ageKey][genderKey] = list;
+    }
+  }
 
   // Pre-parser converting the Run JSON into parsed seconds-based arrays
   const ProcessedRunStandards = {};
@@ -491,13 +571,25 @@
     }
   });
 
-  // Body Composition (WHtR) Step Function
-  function getWHtRScore(whtr) {
+  // JSON Lookup Engine for Body Composition (WHtR)
+  function getJSONWHtRScore(whtr, ageGroupKey, gender) {
     if (isNaN(whtr) || whtr <= 0) return { score: 0, passed: false };
-    if (whtr <= 0.49) return { score: 20, passed: true };
-    if (whtr <= 0.51) return { score: 16, passed: true };
-    if (whtr <= 0.53) return { score: 12, passed: true };
-    if (whtr <= 0.55) return { score: 8, passed: true };
+
+    const table = ProcessedWhtrStandards[ageGroupKey][gender];
+    if (!table || table.length === 0) return { score: 0, passed: false };
+
+    // Check if WHtR exceeds maximum allowed risk threshold (> 0.55 / >= 0.60)
+    if (whtr >= 0.60) {
+      return { score: 0, passed: false };
+    }
+
+    // Lookup matching threshold band ascending
+    for (let i = 0; i < table.length; i++) {
+      if (whtr <= table[i].thresholdRatio) {
+        return { score: table[i].points, passed: whtr <= 0.55 };
+      }
+    }
+
     return { score: 0, passed: false };
   }
 
@@ -555,13 +647,14 @@
     const ageGroupKey = getAgeGroupKey(age);
 
     // Compute component scores using JSON lookup engines
-    const whtrRes = getWHtRScore(whtr);
+    const whtrRes = getJSONWHtRScore(whtr, ageGroupKey, selectedGender);
     const hrpRes = getJSONRepScore(hrp, 'hrp', ageGroupKey, selectedGender);
     const sitRes = getJSONRepScore(situps, 'situps', ageGroupKey, selectedGender);
     const runRes = getRunScore(totalRunSeconds, ageGroupKey, selectedGender);
 
-    // Update UI Elements
-    document.getElementById('scoreWhtr').textContent = `${whtrRes.score} / 20`;
+    // Update UI Elements with WHtR ratio display format
+    const whtrText = !isNaN(whtr) && whtr > 0 ? `${whtrRes.score} / 20 (${whtr.toFixed(3)})` : `${whtrRes.score} / 20`;
+    document.getElementById('scoreWhtr').textContent = whtrText;
     document.getElementById('scoreHrp').textContent = `${hrpRes.score} / 15`;
     document.getElementById('scoreSitups').textContent = `${sitRes.score} / 15`;
     document.getElementById('scoreRun').textContent = `${runRes.score} / 50`;
